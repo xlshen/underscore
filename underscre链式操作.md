@@ -25,5 +25,5 @@
   };
 ```
 `_.chain(obj)`在内部用`_(obj)`先转化为`_`的实例，然后该实例添加了`_chain`属性。而对于`_(obj).chain()`来说，首先通过`_(obj)`创建`_`的实例，然后该实例调用`chain()`方法，该方法第一步因为`_(obj) instanceof _ === true`会直接返回该实例，然后给该实例添加`_chain`属性。在此该两种方法都是初始化实例，然后添加`_chain`属性  
-【注：对于`_(obj)`不熟悉的可以移步  
+【注：对于`_(obj)`不熟悉的可以移步
 [underscore中的_是弄啥的？？？](https://github.com/xlshen/underscore/blob/master/underscore中的_是弄啥的.md)】
