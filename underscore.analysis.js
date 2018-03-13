@@ -190,7 +190,7 @@
         // 返回新建对象
         return result;
     };
-    // 获取对应obj[key]的值
+
     var shallowProperty = function(key) {
         return function(obj) {
             return obj == null ? void 0 : obj[key];
@@ -1152,7 +1152,6 @@
 
     // Return a sorted list of the function names available on the object.
     // Aliased as `methods`.
-    // 返回按顺序排列好的对象中函数的名称数组，也称为methods方法
     _.functions = _.methods = function(obj) {
         var names = [];
         for (var key in obj) {
@@ -1471,10 +1470,6 @@
     // Shortcut function for checking if an object has a given property directly
     // on itself (in other words, not on a prototype).
     // 判断属性是否是自身属性，排除原型链
-    // 第二个参数path类型设计的目的不是为了传递数组
-    // 虽然能够处理数组，只能处理_.has({a: {b: 1}}, [a, b]) 返回true
-    // 但是如果是_.has({a: 1, b: 2}, [a, b]) 返回false
-    // 正常处理path是字符串形式
     _.has = function(obj, path) {
         if (!_.isArray(path)) {
             return obj != null && hasOwnProperty.call(obj, path);
