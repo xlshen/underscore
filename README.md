@@ -1,2 +1,2 @@
 # underscore
-underscore.analysis.js【中文注释版，附案例】
+underscore.analysis.js【分析一下】
