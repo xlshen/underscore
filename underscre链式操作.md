@@ -43,4 +43,4 @@
 
 到这里是不是发现了什么？！Yes，`_.chain(obj)`和`_(obj).chain()`回到了同一起跑线！
 
-> 再梳理一下其中逻辑：chainResult实现函数通过传入的obj实例和obj对象，判断如果obj实例中含有_chain属性则继续调用_(obj).chain()生成具有_chain属性的obj实例对象；如果没有，则说明obj本身已经有了_chain属性【因为调用该函数的都是在_.prototype[XXX]中，该函数的执行最后必然会调用上面说的chainResult方法，func.apply(this, args)最终返回的一定是带有_chain属性的obj】，直接返回obj即可。
+> 最后再梳理一下其中逻辑：chainResult实现函数通过传入的obj实例和obj对象，判断如果obj实例中含有_chain属性则继续调用_(obj).chain()生成具有_chain属性的obj实例对象；如果没有，则说明obj本身已经有了_chain属性【因为调用该函数的都是在_.prototype[XXX]中，该函数的执行最后必然会调用上面说的chainResult方法，func.apply(this, args)最终返回的一定是带有_chain属性的obj】，直接返回obj即可。
