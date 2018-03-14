@@ -51,6 +51,7 @@
     // each 等方法都在该构造函数的原型链上
     // _([1, 2, 3]).each()相当于无new构造了一个新的对象
     // 调用了该对象的each方法，该方法在该对象构造函数的原型链上
+    // 文章号：【underscore中_是弄啥的】
     var _ = function(obj) {
         // 如果参数是"_"的实例，直接返回。例如：_.chain()方法里面的对象实例生成
         if (obj instanceof _) return obj;
@@ -86,6 +87,7 @@
     // functions.
     // 内部优化方法，参数：函数，执行上下文，参数个数
     // 返回根据传入函数在不同执行上下文，不同参数个数的情况下执行的函数
+    // 文章号：【underscore中optimizeCb优化函数】
     var optimizeCb = function(func, context, argCount) {
         // 如果没有指定执行上下文，返回该函数
         if (context === void 0) return func;
@@ -96,7 +98,7 @@
                 };
                 // The 2-parameter case has been omitted only because no current consumers
                 // made use of it.
-                // !!!Tell me why!!! undefined or null???
+                // !!!Tell me why!!!void 0!!!
             case null:
                 // 在执行上下文中，没有参数个数，执行下面
                 // _.each(), _.map()
@@ -127,9 +129,13 @@
     // 通过不同value类型分发不同策略
     var cb = function(value, context, argCount) {
         if (_.iteratee !== builtinIteratee) return _.iteratee(value, context);
+        // 什么也不传入_.iteratee()返回_.identity函数
         if (value == null) return _.identity;
+        // 传入function函数，利用optimizeCb进行优化，返回优化后的函数
         if (_.isFunction(value)) return optimizeCb(value, context, argCount);
+        // 传入Object对象，返回_.matcher(value)执行函数
         if (_.isObject(value) && !_.isArray(value)) return _.matcher(value);
+        // 其他返回_.property(value)执行函数
         return _.property(value);
     };
 
@@ -1709,6 +1715,7 @@
     // Add a "chain" function. Start chaining a wrapped Underscore object.
     // 链式操作
     // OOP和非OOP在此都会转换为OOP进行处理
+    // 文章号：【underscore链式操作】
     _.chain = function(obj) {
         // 构建_的实例对象，调用_(obj),if(obj instanceof _) return obj;返回的还是实例自身
         var instance = _(obj);
@@ -1732,6 +1739,7 @@
     // 混入函数
     // ① 挂载_下面的函数到_.prototype原型上
     // ② 扩展underscroe库函数，参数为对象，方法在对象的属性上
+    // 文章号：【underscore中OOP思想—实例对象方法调用实现机制】
     _.mixin = function(obj) {
         // 遍历对象下面所有方法挂载到_上面和_.prototype上面
         _.each(_.functions(obj), function(name) {
