@@ -8,7 +8,7 @@
   _.mixin = function(obj) {
       // 遍历对象下面所有方法挂载到_上面和_.prototype上面
       _.each(_.functions(obj), function(name) {
-          // 挂载到_上面
+          // 挂载到_上面【此处为扩展，用户可以自定义自己的对象方法混入到_对象上面】
           var func = _[name] = obj[name];
           // 挂载到_.prototype上面
           _.prototype[name] = function() {
@@ -26,3 +26,18 @@
   // 混入_对象
   _.mixin(_);
 ```
+实例：
+```js
+  // 自定义对象方法，扩展到_对象
+  var _obj = {
+    tips: function(obj, msg){
+      console.log(obj, msg);
+    }
+  }
+  _.mixin(_obj);
+  _.tips([1,2,3], "underscore"); // [1, 2, 3] "underscore"
+  _([1,2,3]).tips("underscore"); // [1, 2, 3] "underscore"
+```
+解析：
+`_.mixin()`方法将目标对象中的方法扩展到`_`和`_.prototype`对象上，之后可以直接方法调用和OOP实例调用使用。在通过OOP实例调用时，内部函数获取到传入的`this._wrapped`对象，然后和调用参数一起赋值给`args`变量，最后在`chainResult`函数中调用执行。
+【注：对于`chainResult`函数不清楚的移步：[underscore链式操作](https://github.com/xlshen/underscore/blob/master/underscre%E9%93%BE%E5%BC%8F%E6%93%8D%E4%BD%9C.md)】

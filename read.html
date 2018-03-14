@@ -9,7 +9,14 @@
 <body>
   <script src="underscore.js" charset="utf-8"></script>
   <script type="text/javascript">
-    _([1,2,3]);
+    var _obj = {
+      tips: function(obj, msg){
+        console.log(obj, msg);
+      }
+    }
+    _.mixin(_obj);
+    _.tips([1,2,3], "underscore"); // [1, 2, 3] "underscore"
+    _([1,2,3]).tips("underscore"); // [1, 2, 3] "underscore"
   </script>
 </body>
 </html>

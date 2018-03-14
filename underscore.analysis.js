@@ -1735,7 +1735,7 @@
     _.mixin = function(obj) {
         // 遍历对象下面所有方法挂载到_上面和_.prototype上面
         _.each(_.functions(obj), function(name) {
-            // 挂载到_上面
+            // 挂载到_上面【此处为扩展，用户可以自定义自己的对象方法混入到_对象上面】
             var func = _[name] = obj[name];
             // 挂载到_.prototype上面
             _.prototype[name] = function() {
