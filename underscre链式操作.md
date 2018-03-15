@@ -26,7 +26,7 @@
 ```
 `_.chain(obj)`通过调用`chain()`方法将`_(obj)`先转化为`_`的实例对象，然后将实例对象添加`_chain`属性，返回该实例对象。  
 【注：对于`_(obj)`不熟悉的可以移步
-[underscore中的_是弄啥的](https://github.com/xlshen/underscore/blob/master/underscore%E4%B8%AD_%E6%98%AF%E5%BC%84%E5%95%A5%E7%9A%84.md)】
+[underscore中_是弄啥的](https://github.com/xlshen/underscore/blob/master/underscore%E4%B8%AD_%E6%98%AF%E5%BC%84%E5%95%A5%E7%9A%84.md)】
 
 而对于`_(obj).chain()`来说，首先通过`_(obj)`创建`_`的实例对象，然后该实例调用`_`对象原型中的`chain()`方法【该方法通过`_.mixin()`方法混入到`_.prototype`中】详见：[underscore中OOP思想—实例对象方法调用实现机制](https://github.com/xlshen/underscore/blob/master/underscore%E4%B8%ADOOP%E6%80%9D%E6%83%B3%E2%80%94%E5%AE%9E%E4%BE%8B%E5%AF%B9%E8%B1%A1%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6.md)
 
