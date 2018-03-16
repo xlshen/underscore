@@ -127,12 +127,13 @@
     // an arbitrary callback, a property matcher, or a property accessor.
     // 通过不同value类型分发不同策略
     var cb = function(value, context, argCount) {
+        // 如果外部修改了_.iteratee方法，直接返回_.iteratee()执行
         if (_.iteratee !== builtinIteratee) return _.iteratee(value, context);
         // 什么也不传入_.iteratee()返回_.identity函数
         if (value == null) return _.identity;
         // 传入function函数，利用optimizeCb进行优化，返回优化后的函数
         if (_.isFunction(value)) return optimizeCb(value, context, argCount);
-        // 传入Object对象，返回_.matcher(value)执行函数
+        // 传入Object对象但不能是数组对象，返回_.matcher(value)执行函数
         if (_.isObject(value) && !_.isArray(value)) return _.matcher(value);
         // 其他返回_.property(value)执行函数
         return _.property(value);
@@ -1535,6 +1536,7 @@
 
     // Returns a predicate for checking whether an object has a given set of
     // `key:value` pairs.
+    // 判断给定的Object对象是否包含给定的键值对
     _.matcher = _.matches = function(attrs) {
         attrs = _.extendOwn({}, attrs);
         return function(obj) {
