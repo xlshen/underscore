@@ -113,9 +113,8 @@
                 };
         }
 
-        // 其实不用上面的 switch-case 语句
-        // 直接执行下面的 return 函数就行了
-        // 不这样做的原因是 call 比 apply 快很多
+        // 其实不用上面的 switch-case 语句，直接执行下面的 return 函数就行了
+        // 理由就是充分利用了call的参数格式化优化
         return function() {
             return func.apply(context, arguments);
         };
