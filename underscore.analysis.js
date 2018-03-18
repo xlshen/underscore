@@ -1184,8 +1184,7 @@
             if (defaults) obj = Object(obj);
             // 如果参数只有原始对象一个或者没有的情况，或者obj值为null的话，直接返回该对象
             // 1. _.extend()和_.extendOwn()调用是defaults为undefined，此时length<2或者obj值为null时，返回该对象
-            // 2. _.defaults()调用时，defaults为true，此时length<2时，返回该对象
-            // 【注：此时obj不可能为null，因为即使原始传入的obj为null，经过上一步操作，null也会转换为Object对象】
+            // 2. _.defaults()调用时，defaults为true，此时length<2时，返回该对象【注：此时obj不可能为null，因为即使原始传入的obj为null，经过上一步操作，null也会转换为Object对象】
             if (length < 2 || obj == null) return obj;
             // _.extendOwn(destination, source1, source2, ...) 外层循环从source1开始取值
             // 外层循环参数取源对象source1，source2...，从source1开始，顺序往后执行
