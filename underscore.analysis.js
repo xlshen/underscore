@@ -51,7 +51,7 @@
     // each 等方法都在该构造函数的原型链上
     // _([1, 2, 3]).each()相当于无new构造了一个新的对象
     // 调用了该对象的each方法，该方法在该对象构造函数的原型链上
-    // 文章号：【underscore中_是弄啥的】
+    // 文章号：[underscore中_是弄啥的](https://github.com/xlshen/underscore/issues/1)
     var _ = function(obj) {
         // 如果参数是"_"的实例，直接返回。例如：_.chain()方法里面的对象实例生成
         if (obj instanceof _) return obj;
@@ -87,7 +87,7 @@
     // functions.
     // 内部优化方法，参数：函数，执行上下文，参数个数
     // 返回根据传入函数在不同执行上下文，不同参数个数的情况下执行的函数
-    // 文章号：【underscore中optimizeCb优化函数】
+    // 文章号：[underscore中optimizeCb优化函数](https://github.com/xlshen/underscore/issues/4)
     var optimizeCb = function(func, context, argCount) {
         // 如果没有指定执行上下文，返回该函数
         if (context === void 0) return func;
@@ -1167,20 +1167,43 @@
     };
 
     // An internal function for creating assigner functions.
+    // 浅拷贝代码核心
+    // 内部调用函数：_.extend(), _.extendOwn(), _.defaults()
+    // _.extend = createAssigner(_.allKeys);
+    // _.extendOwn = _.assign = createAssigner(_.keys);
+    // _.defaults = createAssigner(_.allKeys, true);
+    // 文章号：[underscore对象浅拷贝核心](https://github.com/xlshen/underscore/issues/5)
+    // keysFunc为_.key或者_.allKeys方法，返回对象的属性名组成的数组
     var createAssigner = function(keysFunc, defaults) {
+        // 返回函数闭包，通过传入的对象执行以下函数
         return function(obj) {
+            // 获取传入执行函数参数个数
             var length = arguments.length;
+            // 如果defaults执行true，再对传入对象包装一下，此时如果obj === null || undefined,则obj也转换为对象，则执行下一步时就不会因为obj为null而返回null
             if (defaults) obj = Object(obj);
+            // 如果参数只有原始对象一个或者没有的情况，或者obj值为null的话，直接返回该对象
+            // _.extend()和_.extendOwn()调用是defaults为undefined，此时length<2或者obj值为null时，返回该对象
+            // _.defaults()调用时，defaults为true，此时length<2时，返回该对象【注：此时obj不可能为null，因为即使原始传入的obj为null，经过上一步操作，null也会转换为Object对象】
             if (length < 2 || obj == null) return obj;
+            // _.extendOwn(destination, source1, source2, ...) 外层循环从source1开始取值
+            // 外层循环参数取源对象source1，source2...，从source1开始，顺序往后执行
             for (var index = 1; index < length; index++) {
+                    // 获取源对象
                 var source = arguments[index],
+                    // 返回源对象中的属性名数组
                     keys = keysFunc(source),
+                    // 源对象属性名数组长度
                     l = keys.length;
+                // 内层循环源对象属性名数组
                 for (var i = 0; i < l; i++) {
+                    // 获取属性名
                     var key = keys[i];
+                    // _.extendOwn(), _.extend()执行时defaults === false，直接覆盖目标对象相应的属性值
+                    // _.defaults()执行时defaults === true且目标对象当前属性为undefined时，赋值该对象该属性值；如果该对象该属性存在，不执行任何操作
                     if (!defaults || obj[key] === void 0) obj[key] = source[key];
                 }
             }
+            // 返回目标对象
             return obj;
         };
     };
@@ -1190,6 +1213,7 @@
 
     // Assigns a given object with all the own properties in the passed-in object(s).
     // (https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+    //
     _.extendOwn = _.assign = createAssigner(_.keys);
 
     // Returns the first key on an object that passes a predicate test.
@@ -1716,7 +1740,7 @@
     // Add a "chain" function. Start chaining a wrapped Underscore object.
     // 链式操作
     // OOP和非OOP在此都会转换为OOP进行处理
-    // 文章号：【underscore链式操作】
+    // 文章号：[underscore链式操作](https://github.com/xlshen/underscore/issues/3)
     _.chain = function(obj) {
         // 构建_的实例对象，调用_(obj),if(obj instanceof _) return obj;返回的还是实例自身
         var instance = _(obj);
@@ -1740,7 +1764,7 @@
     // 混入函数
     // ① 挂载_下面的函数到_.prototype原型上
     // ② 扩展underscroe库函数，参数为对象，方法在对象的属性上
-    // 文章号：【underscore中OOP思想—实例对象方法调用实现机制】
+    // 文章号：[underscore中OOP思想—实例对象方法调用实现机制](https://github.com/xlshen/underscore/issues/2)
     _.mixin = function(obj) {
         // 遍历对象下面所有方法挂载到_上面和_.prototype上面
         _.each(_.functions(obj), function(name) {
