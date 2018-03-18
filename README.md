@@ -13,3 +13,4 @@ underscore code analysis [version:1.8.3]【分析一下】
 * [underscore中OOP思想—实例对象方法调用实现机制](https://github.com/xlshen/underscore/issues/2)
 * [underscore链式操作](https://github.com/xlshen/underscore/issues/3)
 * [underscore中optimizeCb优化函数](https://github.com/xlshen/underscore/issues/4)
+* [underscore对象浅拷贝核心](https://github.com/xlshen/underscore/issues/5)
