@@ -1169,9 +1169,9 @@
     // An internal function for creating assigner functions.
     // 浅拷贝代码核心
     // 内部调用函数：_.extend(), _.extendOwn(), _.defaults()
-    // _.extend = createAssigner(_.allKeys);
-    // _.extendOwn = _.assign = createAssigner(_.keys);
-    // _.defaults = createAssigner(_.allKeys, true);
+    // 1. _.extend = createAssigner(_.allKeys);
+    // 2. _.extendOwn = _.assign = createAssigner(_.keys);
+    // 3. _.defaults = createAssigner(_.allKeys, true);
     // 文章号：[underscore对象浅拷贝核心](https://github.com/xlshen/underscore/issues/5)
     // keysFunc为_.key或者_.allKeys方法，返回对象的属性名组成的数组
     var createAssigner = function(keysFunc, defaults) {
@@ -1179,11 +1179,13 @@
         return function(obj) {
             // 获取传入执行函数参数个数
             var length = arguments.length;
-            // 如果defaults执行true，再对传入对象包装一下，此时如果obj === null || undefined,则obj也转换为对象，则执行下一步时就不会因为obj为null而返回null
+            // 如果defaults执行true，再对传入对象包装一下，此时如果obj === null || undefined
+            // 则obj也转换为对象，则执行下一步时就不会因为obj为null而返回null
             if (defaults) obj = Object(obj);
             // 如果参数只有原始对象一个或者没有的情况，或者obj值为null的话，直接返回该对象
-            // _.extend()和_.extendOwn()调用是defaults为undefined，此时length<2或者obj值为null时，返回该对象
-            // _.defaults()调用时，defaults为true，此时length<2时，返回该对象【注：此时obj不可能为null，因为即使原始传入的obj为null，经过上一步操作，null也会转换为Object对象】
+            // 1. _.extend()和_.extendOwn()调用是defaults为undefined，此时length<2或者obj值为null时，返回该对象
+            // 2. _.defaults()调用时，defaults为true，此时length<2时，返回该对象
+            // 【注：此时obj不可能为null，因为即使原始传入的obj为null，经过上一步操作，null也会转换为Object对象】
             if (length < 2 || obj == null) return obj;
             // _.extendOwn(destination, source1, source2, ...) 外层循环从source1开始取值
             // 外层循环参数取源对象source1，source2...，从source1开始，顺序往后执行
@@ -1198,8 +1200,8 @@
                 for (var i = 0; i < l; i++) {
                     // 获取属性名
                     var key = keys[i];
-                    // _.extendOwn(), _.extend()执行时defaults === false，直接覆盖目标对象相应的属性值
-                    // _.defaults()执行时defaults === true且目标对象当前属性为undefined时，赋值该对象该属性值；如果该对象该属性存在，不执行任何操作
+                    // 1. _.extendOwn(), _.extend()执行时defaults === false，直接覆盖目标对象相应的属性值
+                    // 2. _.defaults()执行时defaults === true且目标对象当前属性为undefined时，赋值该对象该属性值；如果该对象该属性存在，不执行任何操作
                     if (!defaults || obj[key] === void 0) obj[key] = source[key];
                 }
             }
