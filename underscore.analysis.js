@@ -150,6 +150,7 @@
     // Similar to ES6's rest param (http://ariya.ofilabs.com/2013/03/es6-and-rest-parameter.html)
     // This accumulates the arguments passed into an array, after a given index.
     // 和ES6的rest参数一样的原理，指定长度参数之后所有参数以数组形式返回
+    // 文章号：[underscore中rest参数实现原理](https://github.com/xlshen/underscore/issues/6)
     var restArgs = function(func, startIndex) {
         startIndex = startIndex == null ? func.length - 1 : +startIndex;
         return function() {
