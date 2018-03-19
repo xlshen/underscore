@@ -142,6 +142,7 @@
     // External wrapper for our callback generator. Users may customize
     // `_.iteratee` if they want additional predicate/iteratee shorthand styles.
     // This abstraction hides the internal-only argCount argument.
+    // 原始iteratee函数，如果外部修改了，内部也可以用builtinIteratee引用
     _.iteratee = builtinIteratee = function(value, context) {
         return cb(value, context, Infinity);
     };
@@ -1297,13 +1298,19 @@
     };
 
     // Returns whether an object has a given set of `key:value` pairs.
+    // 判断传入的对象是否含有指定的键值对
     _.isMatch = function(object, attrs) {
+            // 获取attrs对象中属性名数组
         var keys = _.keys(attrs),
+            // 属性名数组的长度
             length = keys.length;
+        // 如果传入的对象为null或者undefined，用length判断true || false
         if (object == null) return !length;
+        // 这里只能理解为如果传入了Number、Boolean、String也包装下返回Object对象吧：Object(true)
         var obj = Object(object);
         for (var i = 0; i < length; i++) {
             var key = keys[i];
+            // 判断key在obj中是否存在或者attrs[key]是否等于obj[key]
             if (attrs[key] !== obj[key] || !(key in obj)) return false;
         }
         return true;
@@ -1563,6 +1570,7 @@
     // `key:value` pairs.
     // 判断给定的Object对象是否包含给定的键值对
     _.matcher = _.matches = function(attrs) {
+        // 获取匹配对象
         attrs = _.extendOwn({}, attrs);
         return function(obj) {
             return _.isMatch(obj, attrs);
