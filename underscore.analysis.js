@@ -152,13 +152,16 @@
     // 和ES6的rest参数一样的原理，指定长度参数之后所有参数以数组形式返回
     // 文章号：[underscore中rest参数实现原理](https://github.com/xlshen/underscore/issues/6)
     var restArgs = function(func, startIndex) {
+        // 如果没有传入startIndex，startIndex默认为func函数形参个数的最后一个，也就说最后一个形参默认为rest对象
         startIndex = startIndex == null ? func.length - 1 : +startIndex;
         return function() {
+                // 获取实际参数个数和startIndex大小之差与0的最大值
             var length = Math.max(arguments.length - startIndex, 0),
+                // 构建长度为length的rest数组
                 rest = Array(length),
                 index = 0;
 
-            // 构建startIndex之后的所有元素组成的数组
+            // 初始化startIndex之后的所有元素为rest数组元素
             for (; index < length; index++) {
                 rest[index] = arguments[index + startIndex];
             }
@@ -171,11 +174,13 @@
                 case 2:
                     return func.call(this, arguments[0], arguments[1], rest);
             }
+            // 如果startIndex超过2，则执行默认的方法：构建args数组，含有所有参数
             var args = Array(startIndex + 1);
             // 构建args数组，结构：[1, 3, 4, [2, 3, 5]]
             for (index = 0; index < startIndex; index++) {
                 args[index] = arguments[index];
             }
+            // args最后一个参数为rest对象
             args[startIndex] = rest;
             return func.apply(this, args);
         };
