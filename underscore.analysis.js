@@ -297,6 +297,7 @@
     var createReduce = function(dir) {
         // Wrap code that reassigns argument variables in a separate function than
         // the one that accesses `arguments.length` to avoid a perf hit. (#1991)
+        // memo为初始值，也是该函数的返回值，内部函数不断更新该值进行返回
         var reducer = function(obj, iteratee, memo, initial) {
             var keys = !isArrayLike(obj) && _.keys(obj),
                 length = (keys || obj).length,
@@ -309,9 +310,9 @@
             }
             // index += dir奇技淫巧，如果dir为-1，则每次递减，相反，每次递增
             for (; index >= 0 && index < length; index += dir) {
+                // currentKey：迭代的数组索引或者当前对象key值
                 var currentKey = keys ? keys[index] : index;
                 // memo：每次循环迭代的返回值
-                // currentKey：迭代的数组索引或者当前对象key值
                 memo = iteratee(memo, obj[currentKey], currentKey, obj);
             }
             return memo;
@@ -331,9 +332,13 @@
     _.reduceRight = _.foldr = createReduce(-1);
 
     // Return the first value which passes a truth test. Aliased as `detect`.
+    // 查找对象里面是否含有自定义规则的值：如果有，返回第一个满足条件的值，如果没有返回-1
     _.find = _.detect = function(obj, predicate, context) {
+        // 数组或者对象对应不同的查找函数，数组：_.findIndex，对象：_.findeKey
         var keyFinder = isArrayLike(obj) ? _.findIndex : _.findKey;
+        // 执行相应的规则返回值，数组返回index，对象返回key值
         var key = keyFinder(obj, predicate, context);
+        // 如果数组index不为-1或者对象key不是undefiend的话，返回对应的value值
         if (key !== void 0 && key !== -1) return obj[key];
     };
 
@@ -1237,6 +1242,7 @@
     _.extendOwn = _.assign = createAssigner(_.keys);
 
     // Returns the first key on an object that passes a predicate test.
+    // 根据传入的规则找到对象中符合条件的值
     _.findKey = function(obj, predicate, context) {
         predicate = cb(predicate, context);
         var keys = _.keys(obj),
