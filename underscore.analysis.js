@@ -203,19 +203,27 @@
         // 返回新建对象
         return result;
     };
-
+    // “浅浅的”获取对象属性值：直接获取
     var shallowProperty = function(key) {
         return function(obj) {
+            // 如果传入对象为null，返回undefined
             return obj == null ? void 0 : obj[key];
         };
     };
-
+    // “深深的”获取对象属性值：嵌套获取
+    // 实例：obj = {name: {age: {so: "不告诉你"}}}; path = [name, age, so];
+    // 返回值："我不告诉你"
     var deepGet = function(obj, path) {
+        // 获取数组长度
         var length = path.length;
+        // 依次循环数组元素，递进式获取对象属性值
         for (var i = 0; i < length; i++) {
+            // 如果递进过程中哪一步出现undefined或者null，直接返回undefined
             if (obj == null) return void 0;
+            // 否则递进覆盖obj对象
             obj = obj[path[i]];
         }
+        // 如果坚持到最后并且length > 0的话，返回obj的值即为最终获取的属性值；如果length==0，返回undefined
         return length ? obj : void 0;
     };
 
@@ -225,6 +233,7 @@
     // Avoids a very nasty iOS 8 JIT bug on ARM-64. #2094
     // JavaScript中数字的最大值Math.pow(2, 53) - 1
     var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
+    // 返回getLenght函数：获取目标对象"length"属性值
     var getLength = shallowProperty('length');
     // 判断是否是Array like数组
     // 包括数组、arguments、HTML Collection和NodeList等
@@ -242,6 +251,7 @@
     // The cornerstone, an `each` implementation, aka `forEach`.
     // Handles raw objects in addition to array-likes. Treats all
     // sparse array-likes as if they were dense.
+    // 基石each方法
     _.each = _.forEach = function(obj, iteratee, context) {
         // 执行函数分发优化策略，即前面的optimizeCb函数，赋值给局部变量iteratee进行代理执行
         iteratee = optimizeCb(iteratee, context);
@@ -253,6 +263,7 @@
             }
         } else {
             // 普通对象
+            // 获取对象属性名数组
             var keys = _.keys(obj);
             for (i = 0, length = keys.length; i < length; i++) {
                 iteratee(obj[keys[i]], keys[i], obj);
@@ -267,11 +278,12 @@
     _.map = _.collect = function(obj, iteratee, context) {
         // cb函数保证不同形式回调函数都能执行
         iteratee = cb(iteratee, context);
-        // 有意思的两行代码
+        // 很巧妙的判断
         // 判断是否是类数组对象，如果是，返回false；反之，执行_.keys()方法返回数组
         // 如果之前之前这个keys是false，则执行obj.length；反之，不是数组，执行keys.length
         var keys = !isArrayLike(obj) && _.keys(obj),
             length = (keys || obj).length,
+            // 构建返回数组
             results = Array(length);
         for (var index = 0; index < length; index++) {
             var currentKey = keys ? keys[index] : index;
