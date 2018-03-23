@@ -348,12 +348,15 @@
         var results = [];
         predicate = cb(predicate, context);
         _.each(obj, function(value, index, list) {
+            // 通过对应传入函数的判断返回进行筛选通过的元素
+            // 例如predicate = function(value, index, list){ return value % 2 === 0}
             if (predicate(value, index, list)) results.push(value);
         });
         return results;
     };
 
     // Return all the elements for which a truth test fails.
+    // 通过使用_.negate方法对传入的predicate方法取反，筛选出不符合条件的元素列表
     _.reject = function(obj, predicate, context) {
         return _.filter(obj, _.negate(cb(predicate)), context);
     };
@@ -366,6 +369,7 @@
             length = (keys || obj).length;
         for (var index = 0; index < length; index++) {
             var currentKey = keys ? keys[index] : index;
+            // 如果存在false的值，就返回false；所有的都通过才返回true
             if (!predicate(obj[currentKey], currentKey, obj)) return false;
         }
         return true;
@@ -379,6 +383,7 @@
             length = (keys || obj).length;
         for (var index = 0; index < length; index++) {
             var currentKey = keys ? keys[index] : index;
+            // 如果存在true的就返回true，否则返回false
             if (predicate(obj[currentKey], currentKey, obj)) return true;
         }
         return false;
@@ -797,6 +802,7 @@
     };
 
     // Generator function to create the indexOf and lastIndexOf functions.
+    // 
     var createIndexFinder = function(dir, predicateFind, sortedIndex) {
         return function(array, item, idx) {
             var i = 0,
