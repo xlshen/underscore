@@ -785,8 +785,15 @@
     // an object should be inserted so as to maintain order. Uses binary search.
     // 利用二分查找，在默认排序下查找插入元素的位置
     _.sortedIndex = function(array, obj, iteratee, context) {
-        // 进入_.property(value)->shallowProperty(value)
         iteratee = cb(iteratee, context, 1);
+        // cb的内部判断函数：
+        // 传入function函数，利用optimizeCb进行优化，返回优化后的函数
+        // if (_.isFunction(iteratee)) return optimizeCb(iteratee, context, argCount);
+        // 传入Object对象但不能是数组对象，返回_.matcher(value)执行函数
+        // if (_.isObject(iteratee) && !_.isArray(iteratee)) return _.matcher(iteratee);
+        // 其他返回_.property(iteratee)执行函数
+        // return _.property(iteratee);
+        // ============================================================================
         // 返回对象的key对应的value值
         var value = iteratee(obj);
         var low = 0,
@@ -802,7 +809,7 @@
     };
 
     // Generator function to create the indexOf and lastIndexOf functions.
-    // 
+    //
     var createIndexFinder = function(dir, predicateFind, sortedIndex) {
         return function(array, item, idx) {
             var i = 0,
