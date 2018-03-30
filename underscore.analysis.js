@@ -398,6 +398,7 @@
     };
 
     // Invoke a method (with arguments) on every item in a collection.
+    // 在集合上调用任意方法执行
     _.invoke = restArgs(function(obj, path, args) {
         var contextPath, func;
         if (_.isFunction(path)) {
@@ -814,21 +815,25 @@
         return function(array, item, idx) {
             var i = 0,
                 length = getLength(array);
+            // 如果传入idx，设置i的开始位置
             if (typeof idx == 'number') {
                 if (dir > 0) {
                     i = idx >= 0 ? idx : Math.max(idx + length, i);
                 } else {
                     length = idx >= 0 ? Math.min(idx + 1, length) : idx + length + 1;
                 }
+            // 如果有序，则执行快速排序
             } else if (sortedIndex && idx && length) {
                 idx = sortedIndex(array, item);
                 return array[idx] === item ? idx : -1;
             }
             // 判断要查找的元素类型是否是NaN
             if (item !== item) {
+                // 通过传入的idx的值，设置array的开始位置
                 idx = predicateFind(slice.call(array, i, length), _.isNaN);
                 return idx >= 0 ? idx + i : -1;
             }
+            // 正常循环查找函数
             for (idx = dir > 0 ? i : length - 1; idx >= 0 && idx < length; idx += dir) {
                 if (array[idx] === item) return idx;
             }
