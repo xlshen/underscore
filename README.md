@@ -8,7 +8,7 @@ underscore code analysis [version:1.8.3]【分析一下】
 #### 源码分析版
 * [underscore.analysis.js](https://github.com/xlshen/underscore/blob/master/underscore.analysis.js)
 
-#### 解读文章版 (2018-03-30持续更新中...)
+#### 解读文章版 (2018-04-02持续更新中...)
 * [underscore中_是弄啥的](https://github.com/xlshen/underscore/issues/1)
 * [underscore中OOP思想—实例对象方法调用实现机制](https://github.com/xlshen/underscore/issues/2)
 * [underscore链式操作](https://github.com/xlshen/underscore/issues/3)

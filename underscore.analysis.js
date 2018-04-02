@@ -215,7 +215,6 @@
     // 返回值："我不告诉你"
     var deepGet = function(obj, path) {
         // 获取数组长度
-        var length = path.length;
         // 依次循环数组元素，递进式获取对象属性值
         for (var i = 0; i < length; i++) {
             // 如果递进过程中哪一步出现undefined或者null，直接返回undefined
@@ -401,14 +400,18 @@
     // 在集合上调用任意方法执行
     _.invoke = restArgs(function(obj, path, args) {
         var contextPath, func;
+        // 如果传入path为function，下面直接执行该函数
         if (_.isFunction(path)) {
             func = path;
+        // 如果path是数组，考虑到对象深层嵌套的情况
         } else if (_.isArray(path)) {
+            // 数组最后一个值为获取对象的最终属性
             contextPath = path.slice(0, -1);
             path = path[path.length - 1];
         }
         return _.map(obj, function(context) {
             var method = func;
+            // 如果传入了path执行函数，至跳过直接执行
             if (!method) {
                 if (contextPath && contextPath.length) {
                     context = deepGet(context, contextPath);
@@ -421,18 +424,22 @@
     });
 
     // Convenience version of a common use case of `map`: fetching a property.
+    // 快速通过对象属性获取对应的值组成的数组
+    // _.pluck([1, 2, 3], "1")
     _.pluck = function(obj, key) {
         return _.map(obj, _.property(key));
     };
 
     // Convenience version of a common use case of `filter`: selecting only objects
     // containing specific `key:value` pairs.
+    // 快速找到包含有给定键值对的对象组成的数组
     _.where = function(obj, attrs) {
         return _.filter(obj, _.matcher(attrs));
     };
 
     // Convenience version of a common use case of `find`: getting the first object
     // containing specific `key:value` pairs.
+    // 快读查找给定属性在对象中对应值或者数组索引值
     _.findWhere = function(obj, attrs) {
         return _.find(obj, _.matcher(attrs));
     };
